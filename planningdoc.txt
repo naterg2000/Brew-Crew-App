@@ -1,0 +1,31 @@
+BrewCrew Planning Document
+
+
+Frontend
+Figma project created for front end: https://www.figma.com/file/VZAs7hmTFdrfz4onmJDZwm/BrewCrew-App-Design?node-id=0%3A1
+
+Backend
+
+User: Anyone using the BrewCrew app
+- first name, last name, profile picture, birthday
+
+Company: an organization of employees
+- name, corporate phone number
+
+Employee: a team member, barista, lead, or manager
+- extends user
+- wage, avaliability
+- can request days off
+- can change avaliability
+
+Manager
+- phone number for employees
+
+Lead
+- phone number for employees (optional visibility)
+
+Barista/ Team member
+- have avaliabilities
+
+Schedule: a display of shifts for each employee
+- employees can see who else will be working with them that shift
