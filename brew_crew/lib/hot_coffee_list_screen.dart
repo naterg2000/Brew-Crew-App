@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'hot_coffee_data.dart';
+import 'package:brew_crew/data_files/hot_coffee_data.dart';
 
 class HotCoffeeListScreen extends StatefulWidget {
   HotCoffeeListScreen({Key? key, required this.title}) : super(key: key);
@@ -24,7 +24,7 @@ class _HotCoffeeListScreen extends State<HotCoffeeListScreen> {
 
   List<HotCoffee> hotDrinks = <HotCoffee>[];
 
-  HotCoffeeListScreen() {
+  _HotCoffeeListScreen() {
 
     HotCoffee dripCoffee = new HotCoffee('Drip coffee', 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
     HotCoffee latte = new HotCoffee('latte', 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500');
@@ -37,12 +37,8 @@ class _HotCoffeeListScreen extends State<HotCoffeeListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
+
     return Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -87,5 +83,55 @@ class _HotCoffeeListScreen extends State<HotCoffeeListScreen> {
             })
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+
+
+/*
+    return Scaffold(
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+        ),
+        body: ListView.builder(
+            itemCount: hotDrinks.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                height: 70,
+                margin: EdgeInsets.only(top: 5, bottom: 5, left: 15, right: 15),
+                color: Colors.white,
+                child: Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 15),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${hotDrinks[index].name}',
+                              style: TextStyle(
+                                  fontSize: 14
+                              ),
+                            ),
+                          ]
+                      ),
+                    ),
+                    Spacer(),
+                    Container(
+                      margin: EdgeInsets.only(right: 20),
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage('${hotDrinks[index].imageURL}'),
+                      ),
+                    )
+                  ],
+
+                ),
+              );
+            })
+
+
+
+      // This trailing comma makes auto-formatting nicer for build methods.
+    );*/
   }
 }

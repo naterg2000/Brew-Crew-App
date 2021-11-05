@@ -1,3 +1,4 @@
+import 'package:brew_crew/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,8 +12,12 @@ import 'coworker_list_screen.dart';
 import 'package:brew_crew/hot_coffee_list_screen.dart';
 import 'package:brew_crew/cold_coffee_list_screen.dart';
 import 'package:brew_crew/schedule_screen.dart';
+import 'package:brew_crew/login_screen.dart';
+import 'package:brew_crew/welcome_screen.dart';
+import 'package:brew_crew/data_files/conversations_data.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -23,41 +28,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: CoworkerListScreen(title: 'Coworkers'),
+      home: WelcomeScreen(title: ''),
+
     );
+
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
-}
 
+} //end MyHomePage
+
+//initialize firebase
 class _MyHomePageState extends State<MyHomePage> {
+
   int _counter = 0;
 
   void _incrementCounter() {
@@ -69,142 +61,147 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  } //end _MyHomePageState
+
+  List<Conversation> conversationList = <Conversation>[];
+
+  _MyHomePageState() {
+    Conversation convoYu = Conversation("Yu", 'November 5th');
+    Conversation convoNysia = Conversation("Nysia", 'November 4th');
+    Conversation convoEveryone = Conversation("Everyone", 'Just now');
+    Conversation convoBaristaGang = Conversation("barista gang", 'Just now');
+    Conversation convoJorge = Conversation("Jorge", 'Just now');
+    Conversation convoKailee = Conversation("Kailee", 'Just now');
+    Conversation convoRyan = Conversation("Ryan", 'Just now');
+
+    conversationList = [convoYu, convoNysia, convoEveryone, convoBaristaGang, convoJorge,
+      convoKailee, convoRyan];
   }
 
   @override
   Widget build(BuildContext context) {
     Color color = Theme.of(context).primaryColor;
 
-    Widget buttonSection = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildButtonColumn(color, Icons.call, "Call"),
-        _buildButtonColumn(color, Icons.call, "Call"),
-        _buildButtonColumn(color, Icons.call, "Call"),
-      ],
-    );
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            scheduleSection,
-            Text(
-              'Your next shift is: ',
-            ),
-            buttonSection,
-            TextButton(onPressed: () {
-              //make a new message
-            }, child: Text("New message")),
-            TextButton(onPressed: () {
-                //move to text thread
-            }, child: Text("Everyone")),
-            TextButton(onPressed: () {
-              //move to text thread
-            }, child: Text("Yu Sun")),
-            TextButton(onPressed: () {
-              //move to text thread
-            }, child: Text("barista gang")),
-            bottomBarSection,
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  Widget scheduleSection = Container(
-    padding: const EdgeInsets.all(32),
-    child: Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        body: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.only(bottom: 8),
-                child:
-                  const Text("At a glance...",
-                      style: TextStyle(fontWeight: FontWeight.bold)
-                  ),
+                Container( //schedule overview section
+
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 250,
+                        margin: EdgeInsets.only(top: 5, bottom: 5, left: 15, right: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.red,
+                          boxShadow: [
+                            BoxShadow(color: Colors.white30, spreadRadius: 3),
+                          ],
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 5, bottom: 5, left: 15, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => ScheduleScreen(title: "Schedule"))
+                                );
+                              }, child: Text("Schedule")),
+                              ElevatedButton(onPressed: () {}, child: Text("Get coverage")),
+                              ElevatedButton(onPressed: () {}, child: Text("Recipes time off")),
+                            ],
+                          )
+                      ),
+                    ]
+                  )
+
               ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
+              Container( //list view
+                  height: 200,
+                  child: ListView.builder(
+                      itemCount: conversationList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          height: 30,
+                          margin: EdgeInsets.only(
+                              top: 5, bottom: 5, left: 15, right: 15),
+                          color: Colors.white,
+                          child: Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: 15),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${conversationList[index].name}',
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                              ),
+                              Spacer(),
+                              Container(
+                                margin: EdgeInsets.only(right: 20),
+                                child: CircleAvatar(
+                                  //this can be a picture of the other person's profile
+                                  //backgroundImage: NetworkImage('${hotDrinks[index].imageURL}'),
+                                ),
+                              )
+                            ],
 
-  Widget bottomBarSection = Container(
-    padding: const EdgeInsets.all(32),
-    child: Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: () {
+                          ),
+                        );
+                      })
+              ),
+              Container(
+                  margin: EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MenuItemListPage(title: "Menu"))
+                              );
+                            }, child: Text("Recipes")),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => CoworkerListScreen(title: "Coworkers"))
+                              );
+                            }, child: Text("Coworkers")),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ProfileScreen(title: "Profile"))
+                              );
+                            }, child: Text("Profile")),
+                      ]
+                  )
+              )
+            ]
+          )
+      );
+    }
 
-              }, child: Text("Recipes")),
-              ElevatedButton(onPressed: () {
 
-              }, child: Text("Coworkers")),
-              ElevatedButton(onPressed: () {
 
-              }, child: Text("Profile")),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
-          ),
-        ),
-      ],
-
-    );
   }
 
-}
+
+
